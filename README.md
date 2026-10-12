@@ -51,7 +51,7 @@ To edit the industry rules, change the `INDUSTRY_RULES` list in the **CONTENT** 
 
 ## About
 
-Built by **Alessandra Alonso**, founder of TouchOne AI. I spent 30 years taking cloud and AI to market at AWS, Google Cloud and Confluent, and now I help small businesses adopt AI practically and responsibly.
+Built by **Alessandra Alonso**, founder of TouchOne AI. I spent 30 years taking cloud and AI to market at AWS, Google Cloud and Confluent, and now I help small and medium size businesses adopt AI practically and responsibly.
 
 ## License
 
