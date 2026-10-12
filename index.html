@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Acceptable-Use Policy Generator</title>
+  <meta name="description" content="Create a clear, plain-English AI use policy for your small business in about 10 minutes. Free, private, no sign-up.">
+
+  <!-- ============================================================
+       STYLES — same look as the AI Readiness Scorecard.
+       ============================================================ -->
+  <style>
+    :root {
+      --bg: #f7f7f5;
+      --card: #ffffff;
+      --text: #1d2330;
+      --muted: #5d6576;
+      --border: #e3e5ea;
+      --accent: #2f5bea;
+      --accent-soft: #e8eeff;
+      --warn-bg: #fff6e0;
+      --warn-text: #7a5300;
+      --paper: #ffffff;
+      --paper-text: #1d2330;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #12151c;
+        --card: #1b1f29;
+        --text: #eef0f4;
+        --muted: #a2a9b8;
+        --border: #2c3240;
+        --accent: #7c9bff;
+        --accent-soft: #232c47;
+        --warn-bg: #3a2f14;
+        --warn-text: #f3d48a;
+      }
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+    }
+    .wrap { max-width: 1200px; margin: 0 auto; padding: 32px 16px 64px; }
+    header { max-width: 760px; margin-bottom: 24px; }
+    h1 { font-size: 2rem; line-height: 1.2; margin: 0 0 12px; }
+    .eyebrow {
+      text-transform: uppercase; letter-spacing: .08em;
+      font-size: .75rem; font-weight: 600; color: var(--accent); margin-bottom: 8px;
+    }
+    .muted { color: var(--muted); }
+    .notice {
+      background: var(--warn-bg); color: var(--warn-text);
+      border-radius: 10px; padding: 12px 16px; font-size: .92rem; margin-top: 16px;
+    }
+
+    /* Two columns on desktop: questions left, live policy right */
+    .layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: 24px; align-items: start; }
+    @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } }
+
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 24px; }
+
+    /* Questions */
+    fieldset { border: 0; padding: 0; margin: 0 0 26px; }
+    legend { font-weight: 700; font-size: 1.02rem; margin-bottom: 4px; padding: 0; }
+    .hint { font-size: .88rem; color: var(--muted); margin: 0 0 10px; }
+    label.field { display: block; font-size: .92rem; font-weight: 600; margin: 10px 0 4px; }
+    input[type=text], input[type=date], select {
+      width: 100%; font: inherit; padding: 10px 12px;
+      border: 1px solid var(--border); border-radius: 10px;
+      background: var(--bg); color: var(--text);
+    }
+    input:focus, select:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+    .choice {
+      display: flex; gap: 10px; align-items: flex-start;
+      padding: 8px 12px; border: 1px solid var(--border); border-radius: 10px;
+      margin-bottom: 6px; cursor: pointer; font-size: .95rem;
+    }
+    .choice:hover { border-color: var(--accent); }
+    .choice input { margin-top: 4px; accent-color: var(--accent); flex-shrink: 0; }
+    .choice:has(input:checked) { border-color: var(--accent); background: var(--accent-soft); }
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0 8px; }
+    @media (max-width: 520px) { .grid2 { grid-template-columns: 1fr; } }
+
+    /* Live policy preview */
+    .preview-col { position: sticky; top: 16px; }
+    @media (max-width: 900px) { .preview-col { position: static; } }
+    .toolbar { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+    button {
+      font: inherit; cursor: pointer; border-radius: 10px;
+      padding: 10px 16px; font-weight: 600; border: 1px solid transparent;
+    }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-ghost { background: transparent; color: var(--text); border-color: var(--border); }
+    .status { font-size: .88rem; color: var(--muted); align-self: center; }
+
+    #policy {
+      background: var(--paper); color: var(--paper-text);
+      border: 1px solid var(--border); border-radius: 14px;
+      padding: 32px; max-height: 80vh; overflow-y: auto;
+      font-family: Georgia, "Times New Roman", serif; font-size: .98rem;
+    }
+    @media (max-width: 900px) { #policy { max-height: none; padding: 22px; } }
+    #policy h1 { font-size: 1.6rem; margin: 0 0 4px; }
+    #policy h2 { font-size: 1.1rem; margin: 22px 0 6px; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    #policy p, #policy li { margin: 0 0 8px; }
+    #policy ul { padding-left: 22px; margin: 0 0 10px; }
+    #policy .meta { color: #5d6576; font-size: .9rem; margin-bottom: 18px; }
+    #policy .disclaimer { font-size: .82rem; color: #5d6576; border-top: 1px solid #e3e5ea; margin-top: 26px; padding-top: 12px; }
+    #policy .sign { margin-top: 16px; line-height: 2.4; }
+
+    footer { text-align: center; margin-top: 32px; font-size: .85rem; color: var(--muted); }
+    footer a { color: var(--accent); }
+
+    /* Printing: only the policy itself */
+    @media print {
+      body { background: #fff; }
+      header, .form-col, .toolbar, footer { display: none !important; }
+      .layout { display: block; }
+      .preview-col { position: static; }
+      #policy { border: 0; max-height: none; overflow: visible; padding: 0; }
+    }
+  </style>
+</head>
+<body>
+<main class="wrap">
+
+  <header>
+    <div class="eyebrow">Free · About 10 minutes · Nothing leaves your browser</div>
+    <h1>AI Acceptable-Use Policy Generator</h1>
+    <p class="muted">Your team is probably already using AI tools. A short, clear policy protects your customers, your data and your reputation. Answer the questions on the left and your policy writes itself on the right, ready to copy, download or print.</p>
+    <div class="notice"><strong>Please note:</strong> this tool creates a starting template, not legal advice. Have the final policy reviewed by a qualified professional, especially if you work in a regulated industry.</div>
+  </header>
+
+  <div class="layout">
+
+    <!-- ===================== QUESTIONS ===================== -->
+    <section class="form-col card">
+      <form id="form" onsubmit="return false">
+
+        <fieldset>
+          <legend>1. About your company</legend>
+          <label class="field" for="company">Company name</label>
+          <input type="text" id="company" name="company" placeholder="e.g. Sunshine Dental Group">
+          <label class="field" for="owner">Who owns this policy? (name or role)</label>
+          <input type="text" id="owner" name="owner" placeholder="e.g. Maria Lopez, Operations Manager">
+          <label class="field" for="contact">Where should questions go? (email)</label>
+          <input type="text" id="contact" name="contact" placeholder="e.g. ai@sunshinedental.com">
+          <label class="field" for="date">Effective date</label>
+          <input type="date" id="date" name="date">
+        </fieldset>
+
+        <fieldset>
+          <legend>2. Industry</legend>
+          <p class="hint">Some industries need extra rules. Pick the closest match.</p>
+          <select name="industry" id="industry">
+            <option value="general">General / other</option>
+            <option value="healthcare">Healthcare (clinics, dental, therapy, home care)</option>
+            <option value="finance">Financial services (accounting, insurance, lending, advisory)</option>
+            <option value="legal">Legal services</option>
+            <option value="education">Education and childcare</option>
+            <option value="retail">Retail, restaurants and hospitality</option>
+            <option value="professional">Professional services (agencies, consulting, IT)</option>
+            <option value="realestate">Real estate</option>
+          </select>
+        </fieldset>
+
+        <fieldset>
+          <legend>3. Your overall approach to AI</legend>
+          <label class="choice"><input type="radio" name="stance" value="encourage" checked> <span><strong>Encouraged:</strong> we want people to use AI to work smarter, within clear rules</span></label>
+          <label class="choice"><input type="radio" name="stance" value="allow"> <span><strong>Allowed with care:</strong> AI is fine for approved uses, but caution comes first</span></label>
+          <label class="choice"><input type="radio" name="stance" value="restrict"> <span><strong>Restricted:</strong> each new use of AI needs approval before anyone starts</span></label>
+        </fieldset>
+
+        <fieldset>
+          <legend>4. Approved AI tools</legend>
+          <p class="hint">Tick the tools your team may use for work.</p>
+          <div class="grid2">
+            <label class="choice"><input type="checkbox" name="tools" value="ChatGPT (OpenAI)" checked> <span>ChatGPT</span></label>
+            <label class="choice"><input type="checkbox" name="tools" value="Claude (Anthropic)"> <span>Claude</span></label>
+            <label class="choice"><input type="checkbox" name="tools" value="Microsoft Copilot"> <span>Microsoft Copilot</span></label>
+            <label class="choice"><input type="checkbox" name="tools" value="Google Gemini"> <span>Google Gemini</span></label>
+            <label class="choice"><input type="checkbox" name="tools" value="AI features built into software we already use (for example email, CRM or accounting tools)" checked> <span>AI built into our existing software</span></label>
+          </div>
+          <label class="field" for="otherTools">Other approved tools (optional)</label>
+          <input type="text" id="otherTools" name="otherTools" placeholder="e.g. Grammarly, Otter.ai">
+        </fieldset>
+
+        <fieldset>
+          <legend>5. Which accounts?</legend>
+          <label class="choice"><input type="radio" name="accounts" value="business" checked> <span>Company-provided business accounts only</span></label>
+          <label class="choice"><input type="radio" name="accounts" value="personal-ok"> <span>Personal accounts are OK for work that involves no confidential information</span></label>
+        </fieldset>
+
+        <fieldset>
+          <legend>6. Information that must never go into AI tools</legend>
+          <p class="hint">Unless a tool has been specifically approved for it.</p>
+          <label class="choice"><input type="checkbox" name="data" value="Customer personal information (names with contact details, addresses, ID numbers)" checked> <span>Customer personal information</span></label>
+          <label class="choice"><input type="checkbox" name="data" value="Employee and HR information (performance, pay, medical or disciplinary records)" checked> <span>Employee and HR information</span></label>
+          <label class="choice"><input type="checkbox" name="data" value="Financial records, bank details and payment card numbers" checked> <span>Financial records and payment details</span></label>
+          <label class="choice"><input type="checkbox" name="data" value="Passwords, access codes and security keys" checked> <span>Passwords and security keys</span></label>
+          <label class="choice"><input type="checkbox" name="data" value="Health or medical information about any person" checked> <span>Health or medical information</span></label>
+          <label class="choice"><input type="checkbox" name="data" value="Contracts, legal matters and anything covered by a confidentiality agreement" checked> <span>Contracts and confidential agreements</span></label>
+          <label class="choice"><input type="checkbox" name="data" value="Trade secrets, pricing strategy and unreleased plans" checked> <span>Trade secrets and business strategy</span></label>
+          <label class="choice"><input type="checkbox" name="data" value="Proprietary source code"> <span>Proprietary source code</span></label>
+        </fieldset>
+
+        <fieldset>
+          <legend>7. Good uses of AI at your company</legend>
+          <div class="grid2">
+            <label class="choice"><input type="checkbox" name="uses" value="Drafting and editing emails, letters and documents" checked> <span>Drafting emails and documents</span></label>
+            <label class="choice"><input type="checkbox" name="uses" value="Summarizing long documents, articles or meeting notes" checked> <span>Summarizing</span></label>
+            <label class="choice"><input type="checkbox" name="uses" value="Brainstorming ideas and outlines" checked> <span>Brainstorming</span></label>
+            <label class="choice"><input type="checkbox" name="uses" value="Researching general topics (with facts checked against reliable sources)" checked> <span>General research</span></label>
+            <label class="choice"><input type="checkbox" name="uses" value="Creating marketing and social media content" checked> <span>Marketing content</span></label>
+            <label class="choice"><input type="checkbox" name="uses" value="Translating text"> <span>Translation</span></label>
+            <label class="choice"><input type="checkbox" name="uses" value="Analyzing data that contains no personal or confidential information"> <span>Data analysis</span></label>
+            <label class="choice"><input type="checkbox" name="uses" value="Drafting replies to customer questions (reviewed before sending)"> <span>Customer reply drafts</span></label>
+            <label class="choice"><input type="checkbox" name="uses" value="Writing or reviewing code"> <span>Coding help</span></label>
+            <label class="choice"><input type="checkbox" name="uses" value="Creating training materials and internal guides"> <span>Training materials</span></label>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>8. Uses that are never allowed</legend>
+          <label class="choice"><input type="checkbox" name="banned" value="Making hiring, firing, promotion or pay decisions based on AI output without meaningful human review" checked> <span>HR decisions without human review</span></label>
+          <label class="choice"><input type="checkbox" name="banned" value="Giving customers final legal, medical, tax or financial advice generated by AI" checked> <span>Final professional advice from AI</span></label>
+          <label class="choice"><input type="checkbox" name="banned" value="Creating fake reviews, misleading content, or images, audio or video that impersonate a real person" checked> <span>Fake reviews and deepfakes</span></label>
+          <label class="choice"><input type="checkbox" name="banned" value="Presenting AI-generated work as entirely original where honesty is expected" checked> <span>Passing off AI work as fully original</span></label>
+          <label class="choice"><input type="checkbox" name="banned" value="Using AI to monitor, profile or make decisions about individual employees or customers without approval" checked> <span>Profiling people without approval</span></label>
+          <label class="choice"><input type="checkbox" name="banned" value="Uploading material we do not have the right to use, such as other people's copyrighted work" checked> <span>Uploading others' copyrighted material</span></label>
+          <label class="choice"><input type="checkbox" name="banned" value="Recording or transcribing meetings or calls with AI note-takers without telling everyone present" checked> <span>AI note-takers without consent</span></label>
+        </fieldset>
+
+        <fieldset>
+          <legend>9. Human review</legend>
+          <label class="choice"><input type="radio" name="review" value="all" checked> <span>A person reviews <strong>all</strong> AI output before it is shared outside the company</span></label>
+          <label class="choice"><input type="radio" name="review" value="highstakes"> <span>A person reviews AI output that is <strong>customer-facing or high-stakes</strong></span></label>
+        </fieldset>
+
+        <fieldset>
+          <legend>10. Telling customers about AI</legend>
+          <label class="choice"><input type="radio" name="disclose" value="chatbots" checked> <span>Tell customers when they are talking to an AI (e.g. chatbots or automated replies)</span></label>
+          <label class="choice"><input type="radio" name="disclose" value="always"> <span>Tell customers whenever AI played a significant part in what we deliver</span></label>
+          <label class="choice"><input type="radio" name="disclose" value="none"> <span>No special disclosure, as long as a person has reviewed the work</span></label>
+        </fieldset>
+
+        <fieldset>
+          <legend>11. Training and review</legend>
+          <label class="choice"><input type="checkbox" name="training" value="yes" checked> <span>Everyone completes a short AI training before using AI tools for work</span></label>
+          <label class="field" for="cadence">Review this policy every</label>
+          <select name="cadence" id="cadence">
+            <option value="6">6 months (recommended, since AI changes fast)</option>
+            <option value="12">12 months</option>
+          </select>
+        </fieldset>
+
+        <button type="button" class="btn-ghost" onclick="resetForm()">Start over</button>
+      </form>
+    </section>
+
+    <!-- ===================== LIVE POLICY ===================== -->
+    <section class="preview-col">
+      <div class="toolbar">
+        <button class="btn-primary" onclick="downloadDoc()">Download for Word</button>
+        <button class="btn-ghost" onclick="window.print()">Print / Save as PDF</button>
+        <button class="btn-ghost" onclick="copyText()">Copy text</button>
+        <span class="status" id="status"></span>
+      </div>
+      <article id="policy" aria-live="polite"></article>
+    </section>
+  </div>
+
+  <footer>
+    Built by <a href="https://github.com/AleAlonso-ai">Alessandra Alonso</a> · TouchOne AI ·
+    Not sure where you stand on AI? Take the free <a href="https://alealonso-ai.github.io/ai-readiness-scorecard/">AI Readiness Scorecard</a>.
+  </footer>
+</main>
+
+<!-- ============================================================
+     CONTENT — extra rules added for each industry.
+     Edit the wording here without touching the logic below.
+     ============================================================ -->
+<script>
+const INDUSTRY_RULES = {
+  general: [],
+  healthcare: [
+    "Protected health information (PHI) must never be entered into an AI tool unless the vendor has signed a Business Associate Agreement (BAA) with us and the tool has been approved for that purpose.",
+    "AI may support administrative work, but clinical decisions, diagnoses and treatment plans must be made by qualified professionals.",
+    "Patient communications drafted with AI must be reviewed by a staff member before they are sent."
+  ],
+  finance: [
+    "Client financial information must not be entered into AI tools unless the tool has been approved for that purpose.",
+    "AI must not be used to make or communicate final credit, investment, tax or insurance decisions. A qualified person makes and owns those decisions.",
+    "Client communications created with AI are subject to the same record-keeping and compliance rules as any other client communication."
+  ],
+  legal: [
+    "Client confidential information and privileged material must not be entered into AI tools unless the tool has been approved for that purpose.",
+    "All AI-assisted legal work must be reviewed by a licensed attorney before it is relied upon or shared.",
+    "Every case, statute or citation produced with AI must be checked against the original source."
+  ],
+  education: [
+    "Student records and personal information about students or families must not be entered into AI tools unless the tool has been approved for that purpose.",
+    "AI must not be the sole basis for grading, admissions, discipline or any decision about a student.",
+    "Content created with AI for students must be reviewed for accuracy and age-appropriateness."
+  ],
+  retail: [
+    "Payment card details must never be entered into any AI tool.",
+    "Customer reviews, testimonials and ratings must be genuine. AI must never be used to write or post fake reviews.",
+    "Promotions, prices and product claims written with AI must be checked for accuracy before publication."
+  ],
+  professional: [
+    "Client information may only be used with AI tools in ways allowed by our contracts and confidentiality agreements.",
+    "Where a client has asked us not to use AI on their work, we will respect that request.",
+    "Deliverables created with AI help must meet the same quality standard as any other work and be reviewed by the responsible team member."
+  ],
+  realestate: [
+    "Property descriptions and marketing created with AI must be accurate and checked against the actual property details.",
+    "AI-edited or generated property images must be clearly labeled and must not misrepresent the property.",
+    "AI must never be used in a way that treats people differently in advertising, screening or pricing based on characteristics protected by fair housing laws."
+  ]
+};
+</script>
+
+<!-- ============================================================
+     LOGIC — reads the answers and writes the policy.
+     ============================================================ -->
+<script>
+const form = document.getElementById("form");
+const policyEl = document.getElementById("policy");
+
+// Today's date as the default effective date
+document.getElementById("date").valueAsDate = new Date();
+
+// Make user-typed text safe to show on the page
+function esc(s) {
+  return String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+}
+
+function list(items) {
+  return "<ul>" + items.map(i => `<li>${i}</li>`).join("") + "</ul>";
+}
+
+function formatDate(d) {
+  return d.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+}
+
+// Read all answers from the form
+function getAnswers() {
+  const fd = new FormData(form);
+  const all = name => fd.getAll(name);
+  return {
+    company:   esc(fd.get("company").trim()) || "[Company Name]",
+    owner:     esc(fd.get("owner").trim())   || "[Policy Owner]",
+    contact:   esc(fd.get("contact").trim()) || "[contact email]",
+    date:      fd.get("date"),
+    industry:  fd.get("industry"),
+    stance:    fd.get("stance"),
+    tools:     all("tools").map(esc),
+    otherTools: esc(fd.get("otherTools").trim()),
+    accounts:  fd.get("accounts"),
+    data:      all("data").map(esc),
+    uses:      all("uses").map(esc),
+    banned:    all("banned").map(esc),
+    review:    fd.get("review"),
+    disclose:  fd.get("disclose"),
+    training:  fd.get("training") === "yes",
+    cadence:   Number(fd.get("cadence"))
+  };
+}
+
+// Build the policy from the answers
+function buildPolicy() {
+  const a = getAnswers();
+  const C = a.company;
+  let n = 0;                                   // section counter
+  const h = title => `<h2>${++n}. ${title}</h2>`;
+
+  // Dates
+  const eff = a.date ? new Date(a.date + "T12:00:00") : new Date();
+  const next = new Date(eff); next.setMonth(next.getMonth() + a.cadence);
+
+  // Approach paragraph
+  const approach = {
+    encourage: `${C} encourages employees to use AI tools to work more efficiently and creatively, as long as they follow this policy. Used well, AI can save time on routine work so we can focus on our customers.`,
+    allow:     `${C} allows the use of AI tools for the approved purposes listed in this policy. When in doubt, employees should pause and ask before using AI for a new task.`,
+    restrict:  `${C} takes a cautious approach to AI. Employees must get approval from ${a.owner} before using AI for any purpose not listed as approved in this policy.`
+  }[a.stance];
+
+  // Tools
+  const tools = [...a.tools];
+  if (a.otherTools) tools.push(a.otherTools);
+  const toolsHtml = tools.length
+    ? `<p>The following AI tools are approved for work use:</p>${list(tools)}`
+    : `<p>No AI tools are currently approved. Contact ${a.owner} to request approval.</p>`;
+  const accountsHtml = a.accounts === "business"
+    ? `<p>Use only company-provided business accounts for work. Personal AI accounts must not be used for company work, because business accounts give us better privacy protections and control over our data.</p>`
+    : `<p>Company-provided business accounts should be used where available. Personal AI accounts may be used only for work that involves no confidential, customer or employee information.</p>`;
+
+  // Review
+  const reviewHtml = a.review === "all"
+    ? `<p>AI can be confidently wrong. A person must review and approve <strong>all</strong> AI-generated content before it is shared outside ${C}.</p>`
+    : `<p>AI can be confidently wrong. A person must review and approve any AI-generated content that is customer-facing or could affect someone's money, health, rights or safety before it is used.</p>`;
+
+  // Disclosure
+  const discloseHtml = {
+    chatbots: `<p>We are honest with customers about AI. When customers interact directly with an AI system, such as a chatbot or automated reply, we will tell them they are communicating with AI and offer a way to reach a person.</p>`,
+    always:   `<p>We are honest with customers about AI. When AI has played a significant part in creating something we deliver to a customer, we will tell them. When customers interact directly with an AI system, we will tell them and offer a way to reach a person.</p>`,
+    none:     `<p>Work created with AI assistance is our responsibility, just like any other work, and is reviewed by a person before delivery. If a customer asks whether AI was used, we will answer honestly.</p>`
+  }[a.disclose];
+
+  const industry = INDUSTRY_RULES[a.industry] || [];
+
+  let html = `
+    <h1>${C} — AI Acceptable-Use Policy</h1>
+    <div class="meta">Effective ${formatDate(eff)} · Policy owner: ${a.owner} · Next review: ${formatDate(next)}</div>
+
+    ${h("Purpose")}
+    <p>This policy explains how people at ${C} may use artificial intelligence (AI) tools at work. Its goals are to help us benefit from AI while protecting our customers, our employees, our information and our reputation.</p>
+
+    ${h("Who this applies to")}
+    <p>This policy applies to all employees, contractors and anyone else doing work for ${C}, whenever they use AI tools for company work, on any device.</p>
+    <p>"AI tools" means any software that generates text, images, audio, video, code or analysis, including chat assistants and AI features built into other software.</p>
+
+    ${h("Our approach")}
+    <p>${approach}</p>
+
+    ${h("Approved tools and accounts")}
+    ${toolsHtml}
+    ${accountsHtml}
+    <p>To request a new tool, contact ${a.owner}. New tools are checked for how they store and use our data before approval.</p>
+
+    ${h("Protecting information")}
+    <p>Anything typed or uploaded into an AI tool may be stored by the provider. ${a.data.length ? "Unless a tool has been specifically approved for it, <strong>never</strong> enter the following into an AI tool:" : "Use good judgment about what you enter into AI tools."}</p>
+    ${a.data.length ? list(a.data) : ""}
+    <p>When in doubt, remove names and identifying details, or leave the information out.</p>
+
+    ${a.uses.length ? `${h("Approved uses")}<p>Examples of good ways to use AI at ${C} include:</p>${list(a.uses)}` : ""}
+
+    ${a.banned.length ? `${h("Prohibited uses")}<p>AI must <strong>never</strong> be used for:</p>${list(a.banned)}` : ""}
+
+    ${h("Accuracy and human review")}
+    ${reviewHtml}
+    <p>The person who uses AI is responsible for the result. Check facts, numbers, names and quotes, and watch for unfair or biased output.</p>
+
+    ${h("Being transparent")}
+    ${discloseHtml}
+
+    ${industry.length ? `${h("Additional rules for our industry")}${list(industry)}` : ""}
+
+    ${a.training ? `${h("Training")}<p>Everyone must complete a short AI training provided by ${C} before using AI tools for work, and refresh it when this policy changes.</p>` : ""}
+
+    ${h("Questions and reporting problems")}
+    <p>Questions about this policy go to ${a.owner} at ${a.contact}.</p>
+    <p>If you think confidential information was entered into an AI tool by mistake, or AI produced something harmful or wrong that reached a customer, report it right away. Reporting mistakes quickly is always the right thing to do.</p>
+    <p>Breaking this policy may lead to loss of access to AI tools and other disciplinary action.</p>
+
+    ${h("Policy review")}
+    <p>AI is changing fast. ${a.owner} will review this policy every ${a.cadence} months, or sooner if laws, tools or our business change.</p>
+
+    ${h("Acknowledgment")}
+    <p>I have read and understand this policy and agree to follow it.</p>
+    <div class="sign">
+      Name: ______________________________<br>
+      Signature: __________________________<br>
+      Date: _______________
+    </div>
+
+    <p class="disclaimer">This policy was created with a free template from the AI Acceptable-Use Policy Generator. It is a starting point, not legal advice, and should be reviewed by a qualified professional before adoption.</p>
+  `;
+  policyEl.innerHTML = html;
+}
+
+// Update the policy every time an answer changes
+form.addEventListener("input", buildPolicy);
+form.addEventListener("change", buildPolicy);
+buildPolicy();
+
+function flash(msg) {
+  const s = document.getElementById("status");
+  s.textContent = msg;
+  setTimeout(() => { s.textContent = ""; }, 2500);
+}
+
+function fileName(ext) {
+  const name = document.getElementById("company").value.trim() || "Company";
+  return `${name.replace(/[^\w\- ]+/g, "").replace(/\s+/g, "-")}-AI-Policy.${ext}`;
+}
+
+// Download a file Word can open and edit
+function downloadDoc() {
+  const doc = `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word">
+    <head><meta charset="utf-8"><title>AI Acceptable-Use Policy</title>
+    <style>body{font-family:Calibri,Arial,sans-serif;font-size:11pt;line-height:1.4}
+    h1{font-size:18pt}h2{font-size:13pt;margin-top:16pt}.meta,.disclaimer{color:#555;font-size:9pt}</style></head>
+    <body>${policyEl.innerHTML}</body></html>`;
+  const blob = new Blob(["﻿", doc], { type: "application/msword" });
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = fileName("doc");
+  link.click();
+  URL.revokeObjectURL(link.href);
+  flash("Downloaded");
+}
+
+function copyText() {
+  navigator.clipboard.writeText(policyEl.innerText)
+    .then(() => flash("Copied to clipboard"))
+    .catch(() => flash("Copy failed. Select the text and copy it manually."));
+}
+
+function resetForm() {
+  form.reset();
+  document.getElementById("date").valueAsDate = new Date();
+  buildPolicy();
+  window.scrollTo(0, 0);
+}
+</script>
+</body>
+</html>
